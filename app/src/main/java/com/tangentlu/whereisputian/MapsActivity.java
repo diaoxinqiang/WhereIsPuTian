@@ -30,6 +30,8 @@ import com.amap.api.maps2d.LocationSource;
 import com.amap.api.maps2d.MapView;
 import com.amap.api.maps2d.model.BitmapDescriptorFactory;
 import com.amap.api.maps2d.model.Circle;
+import com.amap.api.maps2d.model.CircleOptions;
+import com.amap.api.maps2d.model.LatLng;
 import com.amap.api.maps2d.model.Marker;
 import com.amap.api.maps2d.model.MarkerOptions;
 import com.amap.api.maps2d.model.MyLocationStyle;
@@ -56,7 +58,7 @@ import im.fir.sdk.FIR;
 import im.fir.sdk.VersionCheckCallback;
 
 public class MapsActivity extends FragmentActivity implements LocationSource,
-        AMapLocationListener, RadioGroup.OnCheckedChangeListener, GeocodeSearch.OnGeocodeSearchListener, PoiSearch.OnPoiSearchListener {
+        AMapLocationListener, RadioGroup.OnCheckedChangeListener, GeocodeSearch.OnGeocodeSearchListener, PoiSearch.OnPoiSearchListener, AMap.OnMarkerClickListener, AMap.InfoWindowAdapter {
     private int[] markers = {
             R.drawable.poi_marker_1,
             R.drawable.poi_marker_2,
@@ -114,13 +116,12 @@ public class MapsActivity extends FragmentActivity implements LocationSource,
             aMap = mapView.getMap();
             geocoderSearch = new GeocodeSearch(this);
             geocoderSearch.setOnGeocodeSearchListener(this);
+            aMap.setOnMarkerClickListener(this);
+            aMap.setInfoWindowAdapter(this);
             progDialog = new ProgressDialog(this);
             setUpMap();
         }
-        // 绘制一个圆形
-//        circle = aMap.addCircle(new CircleOptions().center(Constants.BEIJING)
-//                .radius(4000).strokeColor(Color.argb(50, 1, 1, 1))
-//                .fillColor(Color.argb(50, 1, 1, 1)).strokeWidth(25));
+
     }
 
     /**
@@ -190,17 +191,19 @@ public class MapsActivity extends FragmentActivity implements LocationSource,
 //                aMap.animateCamera(CameraUpdateFactory.newLatLngZoom(
 //                        AMapUtil.convertToLatLng(result.getRegeocodeQuery().getPoint()), 15));
                Marker regeoMarker = aMap.addMarker(new MarkerOptions().anchor(0.1f, 0.1f));
-//                regeoMarker.setIcon(BitmapDescriptorFactory
-//                        .fromBitmap(BitmapFactory.decodeResource(
-//                                getResources(),
-//                                markers[index])));
-//                index++;
                 regeoMarker.setIcon(BitmapDescriptorFactory
                         .fromBitmap(BitmapFactory.decodeResource(
                                 getResources(),
                                 R.drawable.poi_marker_pressed)));
+//                index++;
+//                regeoMarker.setIcon(BitmapDescriptorFactory
+//                        .fromBitmap(BitmapFactory.decodeResource(
+//                                getResources(),
+//                                markers[index])));
+
 //                NewHospitalList.add()
                 regeoMarker.setPosition(AMapUtil.convertToLatLng(result.getRegeocodeQuery().getPoint()));
+                regeoMarker.showInfoWindow();
 //                ToastUtil.show(MapsActivity.this, addressName);
             } else {
                 ToastUtil.show(MapsActivity.this, "定位失败");
@@ -257,6 +260,12 @@ public class MapsActivity extends FragmentActivity implements LocationSource,
             if (amapLocation != null
                     && amapLocation.getErrorCode() == 0) {
                 mListener.onLocationChanged(amapLocation);// 显示系统小蓝点
+//                aMap.moveCamera(CameraUpdateFactory.newLatLngBounds(LatLngBounds.builder().include(rightLatlng).include(LeftLatlng).build(), 10));
+                //         绘制一个圆形
+                LatLng locationLatLng = new LatLng(amapLocation.getLatitude(), amapLocation.getLongitude());
+                circle = aMap.addCircle(new CircleOptions().center(locationLatLng)
+                        .radius(4000).strokeColor(Color.argb(50, 1, 1, 1))
+                        .fillColor(Color.argb(90, 1, 1, 1)).strokeWidth(1));
                 deactivate();
                 String city  = amapLocation.getCity();
                 if(isFirst) {
@@ -510,6 +519,65 @@ public class MapsActivity extends FragmentActivity implements LocationSource,
 //				Toast.makeText(AboutActivity2.this, "获取完成", Toast.LENGTH_SHORT).show();
             }
         });
+    }
+
+    @Override
+    public boolean onMarkerClick(Marker marker) {
+        if (marker.getObject() != null) {
+            ToastUtil.showShortToast(this,((PoiItem)marker.getObject()).getBusinessArea());
+            marker.setIcon(BitmapDescriptorFactory
+                        .fromBitmap(BitmapFactory.decodeResource(
+                                getResources(),
+                                R.drawable.poi_marker_1)));
+        }
+//            whetherToShowDetailInfo(true);
+//            try {
+//                PoiItem mCurrentPoi = (PoiItem) marker.getObject();
+//                if (mlastMarker == null) {
+//                    mlastMarker = marker;
+//                } else {
+//                    // 将之前被点击的marker置为原来的状态
+//                    resetlastmarker();
+//                    mlastMarker = marker;
+//                }
+//                detailMarker = marker;
+//                detailMarker.setIcon(BitmapDescriptorFactory
+//                        .fromBitmap(BitmapFactory.decodeResource(
+//                                getResources(),
+//                                R.drawable.poi_marker_pressed)));
+//                setPoiItemDisplayContent(mCurrentPoi);
+//            } catch (Exception e) {
+//                // TODO: handle exception
+//            }
+//        }else {
+//            whetherToShowDetailInfo(false);
+//            resetlastmarker();
+//        }
+        return true;
+    }
+    // 将之前被点击的marker置为原来的状态
+    private void resetlastmarker() {
+//        int index = poiOverlay.getPoiIndex(mlastMarker);
+//        if (index < 10) {
+//            mlastMarker.setIcon(BitmapDescriptorFactory
+//                    .fromBitmap(BitmapFactory.decodeResource(
+//                            getResources(),
+//                            markers[index])));
+//        }else {
+//            mlastMarker.setIcon(BitmapDescriptorFactory.fromBitmap(
+//                    BitmapFactory.decodeResource(getResources(), R.drawable.marker_other_highlight)));
+//        }
+//        mlastMarker = null;
+
+    }
+    @Override
+    public View getInfoWindow(Marker marker) {
+        return null;
+    }
+
+    @Override
+    public View getInfoContents(Marker marker) {
+        return null;
     }
 
     @SuppressLint("ParcelCreator")
