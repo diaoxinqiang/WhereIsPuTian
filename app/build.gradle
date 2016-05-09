@@ -1,0 +1,83 @@
+apply plugin: 'com.android.application'
+apply plugin: 'im.fir.plugin.gradle'//必填
+
+fir {
+    //必填 上传 fir.im apkToken
+    apiToken 'dcc117d0b6aee0f9024170784f303368'
+    //可选 上传fir.im 中显示的changelog
+    changeLog '替换为你的更新日志'
+}
+android {
+    compileSdkVersion 23
+    buildToolsVersion "23.0.2"
+    sourceSets {
+        main {
+            jniLibs.srcDirs = ['libs']
+        }
+    }
+
+    def versionPropsFile = file('version.properties')
+    if (versionPropsFile.canRead()) {
+        Properties versionProps = new Properties()
+        versionProps.load(new FileInputStream(versionPropsFile))
+
+        def verCode = versionProps['VERSION_CODE'].toInteger()
+        def runTasks = gradle.startParameter.taskNames
+
+        if (':app:assembleRelease' in runTasks) {
+            versionProps['VERSION_CODE'] = (++verCode).toString()
+            versionProps.store(versionPropsFile.newWriter(), null)
+        }
+        def verName = "0." + versionProps['VERSION_CODE'].toString()
+
+        defaultConfig {
+            applicationId "com.tangentlu.whereisputian"
+            minSdkVersion 15
+            targetSdkVersion 23
+            versionCode verCode
+            versionName verName
+        }
+//修改生成的apk名字
+        applicationVariants.all { variant ->
+            if (variant.buildType.name.equals('release')) {
+                variant.outputs.each { output ->
+                    def appName = 'ptzn_'
+                    def oldFile = output.outputFile
+                    def releaseApkName
+
+                    releaseApkName = appName + "0." + verCode + '.apk'
+                    output.outputFile = new File(oldFile.parent, releaseApkName)
+                }
+            }
+        }
+
+    } else {
+        throw new GradleException("Could not read version.properties!")
+    }
+    signingConfigs {
+        szridge {
+            keyAlias 'ridge'
+            keyPassword 'ce555555'
+            storeFile file("D:/importance/sz_ridge.jks")
+            storePassword 'ce555555'
+        }
+    }
+    buildTypes {
+        debug {
+            signingConfig signingConfigs.szridge
+        }
+        release {
+            signingConfig signingConfigs.szridge
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+        }
+    }
+}
+
+dependencies {
+    compile fileTree(include: ['*.jar'], dir: 'libs')
+    testCompile 'junit:junit:4.12'
+    compile 'com.android.support:appcompat-v7:23.3.0'
+    compile 'im.fir:fir-sdk:latest.integration@aar'
+    compile files('libs/AMap_Search_V3.2.1_20160308.jar')
+}

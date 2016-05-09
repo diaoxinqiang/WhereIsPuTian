@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"-->
+    <!--android:layout_width="match_parent"-->
+    <!--android:orientation="vertical"-->
+    <!--android:layout_height="match_parent">-->
+    <!--<ImageView-->
+        <!--android:layout_marginLeft="10dp"-->
+        <!--android:scaleType="center"-->
+        <!--android:layout_width="wrap_content"-->
+        <!--android:layout_height="50dp"-->
+        <!--android:layout_gravity="center"-->
+        <!--android:src="@drawable/biaozhi"/>-->
+    <!--<LinearLayout-->
+        <!--android:layout_marginTop="6dp"-->
+        <!--android:layout_marginLeft="8dp"-->
+        <!--android:gravity="center_vertical"-->
+        <!--android:layout_width="match_parent"-->
+        <!--android:layout_height="match_parent"-->
+        <!--android:orientation="vertical">-->
+        <!--<TextView-->
+            <!--android:layout_marginLeft="8dp"-->
+            <!--android:id="@+id/bai_du_name_tv"-->
+            <!--android:layout_width="fill_parent"-->
+            <!--android:textSize="16dp"-->
+            <!--android:textColor="#333333"-->
+            <!--android:layout_height="wrap_content"-->
+            <!--android:text="名字"/>-->
+        <!--<TextView-->
+            <!--android:textColor="#888888"-->
+            <!--android:layout_marginLeft="8dp"-->
+            <!--android:lines="1"-->
+            <!--android:id="@+id/bai_du_address_tv"-->
+            <!--android:layout_width="fill_parent"-->
+            <!--android:layout_height="wrap_content"-->
+            <!--android:text="地址"/>-->
+    <!--</LinearLayout>-->
+    <!--&lt;!&ndash;<TextView&ndash;&gt;-->
+        <!--&lt;!&ndash;android:id="@+id/hospitalName"&ndash;&gt;-->
+        <!--&lt;!&ndash;android:layout_width="match_parent"&ndash;&gt;-->
+        <!--&lt;!&ndash;android:text="医院"&ndash;&gt;-->
+        <!--&lt;!&ndash;android:layout_height="15dp" />&ndash;&gt;-->
+    <!--&lt;!&ndash;<TextView&ndash;&gt;-->
+        <!--&lt;!&ndash;android:id="@+id/hospitalAddress"&ndash;&gt;-->
+        <!--&lt;!&ndash;android:layout_width="match_parent"&ndash;&gt;-->
+        <!--&lt;!&ndash;android:text="地址"&ndash;&gt;-->
+        <!--&lt;!&ndash;android:layout_height="15dp" />&ndash;&gt;-->
+<!--</LinearLayout>-->
+
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+android:layout_width="wrap_content"
+android:orientation="horizontal"
+android:layout_height="wrap_content">
+<ImageView
+    android:layout_marginLeft="10dp"
+    android:scaleType="center"
+    android:layout_width="wrap_content"
+    android:layout_height="50dp"
+    android:layout_gravity="center"
+    android:src="@drawable/poi_marker_pressed"/>
+<LinearLayout
+    android:layout_marginTop="6dp"
+    android:layout_marginLeft="8dp"
+    android:gravity="center_vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+    <TextView
+        android:layout_marginLeft="8dp"
+        android:id="@+id/hospitalName"
+        android:layout_width="fill_parent"
+        android:textSize="16dp"
+        android:textColor="#333333"
+        android:layout_height="wrap_content"
+        android:text="名字"/>
+    <TextView
+        android:textColor="#888888"
+        android:layout_marginLeft="8dp"
+        android:lines="1"
+        android:id="@+id/hospitalAddress"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:text="地址"/>
+</LinearLayout>
+</LinearLayout>
